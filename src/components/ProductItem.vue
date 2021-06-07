@@ -36,9 +36,17 @@ import colors from "../data/colors.js"
 export default {
   methods: {
     resolveColor(colorName){ 
+      console.log('ProductItem.vue/resolveColor()',colorName);
       return colors.filter(colors => colors.name==colorName)[0]["value"];
     }
   },
+  // TODO: Так не работает :(
+  // computed: {
+  //   resolveColor(colorName){ 
+  //     console.log('resolveColor',colorName);
+  //     return colors.filter(colors => colors.name==colorName)[0]["value"];
+  //   }
+  // },
   data() {
     return {
       color: '#73B6EA',
