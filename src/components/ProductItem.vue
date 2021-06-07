@@ -14,48 +14,30 @@
         <span class="catalog__price"> {{ item.price }} ₽ </span>
 
         <ul class="colors colors--black">
-          <li class="colors__item">
+          <li class="colors__item" v-for="color in item.colors" :key="color.name">
             <label class="colors__label">
               <input
                 class="colors__radio sr-only"
                 type="radio"
-                value="#73B6EA"
-                v-model="color"                
+                :value="resolveColor(color)"                               
               />
-              <span class="colors__value" style="background-color: #73b6ea">
+              <span class="colors__value" :style="'background-color: '+resolveColor(color)">
               </span>
             </label>
-          </li>
-          <li class="colors__item">
-            <label class="colors__label">
-              <input
-                class="colors__radio sr-only"
-                type="radio"
-                value="#8BE000"
-                v-model="color"
-              />
-              <span class="colors__value" style="background-color: #8be000">
-              </span>
-            </label>
-          </li>
-          <li class="colors__item">
-            <label class="colors__label">
-              <input
-                class="colors__radio sr-only"
-                type="radio"
-                value="#222"
-                v-model="color"
-              />
-              <span class="colors__value" style="background-color: #222">
-              </span>
-            </label>
-          </li>
+          </li>          
         </ul>
       </li>
 </template>
 
 <script>
+import colors from "../data/colors.js"
+
 export default {
+  methods: {
+    resolveColor(colorName){ 
+      return colors.filter(colors => colors.name==colorName)[0]["value"];
+    }
+  },
   data() {
     return {
       color: '#73B6EA',
