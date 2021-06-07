@@ -3,8 +3,7 @@
     <ProductItem
       v-for="p in products"
       :key="p.id"
-      :item="p"
-      :index="index"
+      :item="p"      
     />
   </ul>
 </template>
