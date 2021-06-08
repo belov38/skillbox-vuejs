@@ -51,7 +51,8 @@
                 class="colors__radio sr-only"
                 type="radio"
                 name="color"
-                :value="c.value"                
+                :value="c.id" 
+                v-model="currentColorId"               
               />
               <span class="colors__value" :style="'background-color: '+c.value">
               </span>
@@ -166,12 +167,13 @@ import categories from "../data/categories.js";
 import colors from "../data/colors.js";
 
 export default {
-  props: ["priceFrom", "priceTo", "categoryId"],
+  props: ["priceFrom", "priceTo", "categoryId","colorId"],
   data(){
     return {
       currentPriceFrom:0,
       currentPriceTo:0,
       currentCategoryId:0,
+      currentColorId:0      
     }
   },
   computed: {
@@ -192,17 +194,23 @@ export default {
       categoryId(value){
         this.currentCategoryId=value;
       },
+      color(value){
+        this.colorId=value;
+      },
   },
   methods: {
     submit(){
       this.$emit('update:priceFrom',this.currentPriceFrom);
       this.$emit('update:priceTo',this.currentPriceTo);
       this.$emit('update:categoryId',this.currentCategoryId);
+      console.log('submit()',this.currentCategoryId)
+      this.$emit('update:colorId',this.currentColorId);
     },
     reset(){
       this.$emit('update:priceFrom',0);
       this.$emit('update:priceTo',0);
       this.$emit('update:categoryId',0);
+      this.$emit('update:colorId',0);
     },
   }
 };

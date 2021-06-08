@@ -1,29 +1,29 @@
 export default [
     {
-        name:'blue',
+        id:'blue',
         value:'#73B6EA'
     },
     {
-        name:'yellow',
+        id:'yellow',
         value:'#FFBE15'
     },
     {
-        name:'gray',
+        id:'gray',
         value:'#939393'
     },
     {
-        name:'green',
+        id:'green',
         value:'#8BE000'
     },
     {
-        name:'orange',
+        id:'orange',
         value:'#FF6B00'
     },
     {
-        name:'white',
+        id:'white',
         value:'#EFEFEF'
     },{
-        name:'black',
+        id:'black',
         value:'#000'
     }
 ]

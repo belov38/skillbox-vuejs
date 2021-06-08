@@ -14,7 +14,7 @@
         <span class="catalog__price"> {{ item.price }} ₽ </span>
 
         <ul class="colors colors--black">
-          <li class="colors__item" v-for="c in item.colors" :key="c.name">
+          <li class="colors__item" v-for="c in item.colors" :key="c.id">
             <label class="colors__label">
               <input
                 class="colors__radio sr-only"
@@ -36,17 +36,9 @@ import colors from "../data/colors.js"
 export default {
   methods: {
     resolveColor(colorName){ 
-      console.log('ProductItem.vue/resolveColor()',colorName);
-      return colors.filter(colors => colors.name==colorName)[0]["value"];
+      return colors.filter(colors => colors.id==colorName)[0]["value"];
     }
   },
-  // TODO: Так не работает :(
-  // computed: {
-  //   resolveColor(colorName){ 
-  //     console.log('resolveColor',colorName);
-  //     return colors.filter(colors => colors.name==colorName)[0]["value"];
-  //   }
-  // },
   data() {
     return {
       color: '#73B6EA',

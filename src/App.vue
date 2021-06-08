@@ -10,6 +10,7 @@
         :price-from.sync="filterPriceFrom"
         :price-to.sync="filterPriceTo"
         :category-id.sync="filterCategoryId"
+        :color-id.sync="filterColorId"
       />
       <section class="catalog">
         <ProductList :products="products"></ProductList>
@@ -37,6 +38,7 @@ export default {
       filterPriceFrom: 0,
       filterPriceTo: 0,
       filterCategoryId: 0,
+      filterColorId:0,
       page: 1,
       productPerPage: 3,
     };
@@ -44,6 +46,14 @@ export default {
   computed: {
     filteredProducts() {
       let filteredProducts = products;
+      
+      if (this.filterColorId) {
+        
+        filteredProducts = filteredProducts.filter(          
+          (product) => product.colors.includes(this.filterColorId)
+        );      
+      }
+
       if (this.filterPriceFrom > 0) {
         filteredProducts = filteredProducts.filter(
           (product) => product.price > this.filterPriceFrom
