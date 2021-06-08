@@ -2,11 +2,11 @@ import Vue from "vue";
 import App from "./App.vue";
 
 
-// import {message1,message2} from "./data"
-// import ShowMessage from "./msg.js"
+import {message1,message2} from "./data"
+import ShowMessage from "./msg.js"
 
-// ShowMessage(message1);
-// ShowMessage(message2);
+ShowMessage(message1);
+ShowMessage(message2);
 
 Vue.config.productionTip = false;
 
