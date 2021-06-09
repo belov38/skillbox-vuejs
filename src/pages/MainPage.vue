@@ -13,7 +13,7 @@
         :color-id.sync="filterColorId"
       />
       <section class="catalog">
-        <ProductList :products="products"></ProductList>
+        <ProductList :products="products" @gotoPage="(pageName, pageParams)=> $emit('gotoPage',pageName, pageParams)"></ProductList>
         <BasePagination
           v-model="page"
           :count="countProducts"
