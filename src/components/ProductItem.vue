@@ -11,7 +11,7 @@
           <a href="#">{{ item.title }}</a>
         </h3>
 
-        <span class="catalog__price"> {{ item.price }} ₽ </span>
+        <span class="catalog__price"> {{ item.price | numberFormat }} ₽ </span>
 
         <ul class="colors colors--black">
           <li class="colors__item" v-for="c in item.colors" :key="c.id">
@@ -32,16 +32,18 @@
 
 <script>
 import colors from "../data/colors.js"
-import eventBus from "@/eventBus.js"
+import gotoPage from "@/helpers/gotoPage.js"
+import numberFormat from "@/helpers/numberFormat.js"
 
 export default {
+  filters:{
+    numberFormat
+  },
   methods: {
     resolveColor(colorName){ 
       return colors.filter(colors => colors.id==colorName)[0]["value"];
     },
-    gotoPage(pageName, pageParams){
-      eventBus.$emit('gotoPage', pageName, pageParams)
-    }
+    gotoPage
   },
   
   data() {
