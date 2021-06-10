@@ -30,7 +30,7 @@
         <span class="item__code">Артикул: {{ product.id }}</span>
         <h2 class="item__title">{{ product.title }}</h2>
         <div class="item__form">
-          <form class="form" action="#" method="POST">
+          <form class="form" action="#" method="POST" @submit.prevent="addToCart">
             <b class="item__price"> {{ product.price | numberFormat }} ₽ </b>
 
             <fieldset class="form__block">
@@ -133,7 +133,7 @@
                   </svg>
                 </button>
 
-                <input type="text" value="1" name="count" />
+                <input type="text" v-model="productAmount" />
 
                 <button type="button" aria-label="Добавить один товар">
                   <svg width="12" height="12" fill="currentColor">
@@ -219,8 +219,17 @@ import gotoPage from "@/helpers/gotoPage.js"
 import numberFormat from "@/helpers/numberFormat.js"
 
 export default {  
+  data(){
+    return {
+      productAmount: 1,
+    }
+  },
   methods:{
-    gotoPage
+    gotoPage,
+    addToCart(){
+      this.$store.commit('addProductToCart',{productId:this.product.id, amount:this.productAmount})
+    }
+    
   },
   filters:{
     numberFormat
