@@ -39,17 +39,8 @@ export default {
     numberFormat
   },
   methods: {
-    // resolveColor(colorName){ 
-    //   return colors.filter(colors => colors.id==colorName)[0]["value"];
-    // },
     gotoPage
-  },
-  
-  data() {
-    return {
-      color: '#73B6EA',
-    }
-  },
+  },  
   props:['item','index']
 }
 </script>
