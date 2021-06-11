@@ -45,7 +45,7 @@
       <fieldset class="form__block">
         <legend class="form__legend">Цвет</legend>
         <ul class="colors">
-          <li class="colors__item" v-for="c in colors" :key="c.name">
+          <li class="colors__item" v-for="c in colors" :key="c.id">
             <label class="colors__label">
               <input
                 class="colors__radio sr-only"
@@ -54,7 +54,7 @@
                 :value="c.id" 
                 v-model="currentColorId"               
               />
-              <span class="colors__value" :style="'background-color: '+c.value">
+              <span class="colors__value" :style="'background-color: '+c.code">
               </span>
             </label>
           </li>         
@@ -163,7 +163,6 @@
 </template>
 
 <script>
-import colors from "../data/colors.js";
 import axios from 'axios';
 import { API_BASE_URL } from '@/config.js'
 
@@ -176,6 +175,7 @@ export default {
       currentCategoryId:0,
       currentColorId:0,
       categoriesDate: null,   
+      colorsData: null,
     }
   },
   computed: {
@@ -183,7 +183,7 @@ export default {
       return this.categoriesDate ? this.categoriesDate.items : [];
     },
     colors() {
-      return colors;
+      return this.colorsData ? this.colorsData.items : [];
     }
   },
   watch:{
@@ -194,25 +194,31 @@ export default {
         this.currentPriceTo=value;
       },
       categoryId(value){
+        console.log('w cat')
         this.currentCategoryId=value;
       },
-      color(value){
+      colorId(value){
+        console.log('w color')
         this.colorId=value;
       },
   },
   created(){
     this.loadCategories();
+    this.loadColors();
   },
   methods: {
     loadCategories(){
       axios
         .get(API_BASE_URL + 'api/productCategories').then(response => this.categoriesDate = response.data);      
     },
+    loadColors(){
+      axios
+        .get(API_BASE_URL + 'api/colors').then(response => this.colorsData = response.data);      
+    },
     submit(){
       this.$emit('update:priceFrom',this.currentPriceFrom);
       this.$emit('update:priceTo',this.currentPriceTo);
-      this.$emit('update:categoryId',this.currentCategoryId);
-      console.log('submit()',this.currentCategoryId)
+      this.$emit('update:categoryId',this.currentCategoryId);      
       this.$emit('update:colorId',this.currentColorId);
     },
     reset(){
