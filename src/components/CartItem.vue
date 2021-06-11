@@ -44,7 +44,8 @@ import { mapMutations } from 'vuex';
 
 export default {
     props:['item'],
-    filters: {numberFormat},    
+    filters: {numberFormat},   
+    
     computed: {
         amount: {
             get(){
