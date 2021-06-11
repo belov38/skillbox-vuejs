@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import products from '@/data/products'
+import axios from "axios";
+import {API_BASE_URL} from "@/config"
 
 Vue.use(Vuex);
 
@@ -9,9 +11,32 @@ export default new Vuex.Store({
         cartProducts: [
             {productId:1, amount:2}
         ],
-
+        userAccesKey: null,
+        cartProductsData: []
+    },
+    actions:{
+        loadCart(context){ 
+            axios
+                .get(API_BASE_URL + 'api/baskets',{
+                    userAccessKey:context.userAccesKey
+                })
+                .then(response => {
+                    if(!context.userAccesKey){
+                        localStorage.setItem('UserAccessKey',response.data.user.accessKey);
+                        context.commit('updateUserAccessKey', response.data.user.accessKey);                        
+                    }
+                    context.commit('updateCartProductsData', response.data.items);
+                })
+        }
     },
     mutations:{
+        updateUserAccessKey(state, accessKey){
+            state.userAccesKey = accessKey;
+        },
+        updateCartProductsData(state, items){
+            state.cartProducts = items;
+        },
+
         addProductToCart(state, {productId, amount}){
             const item = state.cartProducts.find(item => item.productId === productId);
 
