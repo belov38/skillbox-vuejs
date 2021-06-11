@@ -35,7 +35,10 @@ export default {
   components: { ProductList, BasePagination, ProductFilter },
   methods:{
     loadProducts(){
-      axios
+      clearTimeout(this.loadProductTimer);
+      
+      this.loadProductTimer = setTimeout(()=> {
+        axios
         .get(API_BASE_URL + `api/products`,{
           params:{
             page: this.page,
@@ -44,7 +47,8 @@ export default {
             minPrice: this.filterPriceFrom,
             maxPrice: this.filterPriceTo
           }
-        }).then(response => this.productsData = response.data);      
+        }).then(response => this.productsData = response.data); 
+      },0)           
     }
   },
   created(){    
@@ -60,6 +64,7 @@ export default {
       productPerPage: 3,
 
       productsData:null,
+      loadProductTimer:0,
     };
   },
   watch:{
