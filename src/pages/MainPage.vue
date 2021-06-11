@@ -29,13 +29,14 @@ import ProductList from "@/components/ProductList.vue";
 import BasePagination from "@/components/BasePagination.vue";
 import ProductFilter from "@/components/ProductFilter.vue";
 import axios from 'axios';
+import { API_BASE_URL } from '@/config.js'
 
 export default {  
   components: { ProductList, BasePagination, ProductFilter },
   methods:{
     loadProducts(){
       axios
-        .get(`https://vue-study.skillbox.cc/api/products`,{
+        .get(API_BASE_URL + `api/products`,{
           params:{
             page: this.page,
             limit: this.productPerPage,
