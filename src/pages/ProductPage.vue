@@ -1,5 +1,7 @@
 <template>
-  <main class="content container">
+  <main class="content container" v-if="productLoading">Загрузка</main>
+  <main class="content container" v-else-if="!productData">Ошибка</main>
+  <main class="content container" v-else>
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
@@ -20,7 +22,7 @@
           <img
             width="570"
             height="570"
-            :src="product.image"            
+            :src="product.image.file.url"            
             :alt="product.title"
           />
         </div>        
@@ -36,50 +38,21 @@
             <fieldset class="form__block">
               <legend class="form__legend">Цвет:</legend>
               <ul class="colors">
-                <li class="colors__item">
+                <li class="colors__item" v-for="c in product.colors" :key="c.id">
                   <label class="colors__label">
                     <input
                       class="colors__radio sr-only"
                       type="radio"
                       name="color-item"
-                      value="blue"
+                      :value="c.title"
                       checked=""
                     />
                     <span
                       class="colors__value"
-                      style="background-color: #73b6ea"
+                      :style="'background-color: ' + c.code"
                     >
                     </span>
                   </label>
-                </li>
-                <li class="colors__item">
-                  <label class="colors__label">
-                    <input
-                      class="colors__radio sr-only"
-                      type="radio"
-                      name="color-item"
-                      value="yellow"
-                    />
-                    <span
-                      class="colors__value"
-                      style="background-color: #ffbe15"
-                    >
-                    </span>
-                  </label>
-                </li>
-                <li class="colors__item">
-                  <label class="colors__label">
-                    <input
-                      class="colors__radio sr-only"
-                      type="radio"
-                      name="color-item"
-                      value="gray" />
-                    <span
-                      class="colors__value"
-                      style="background-color: #939393"
-                    >
-                    </span
-                  ></label>
                 </li>
               </ul>
             </fieldset>
@@ -198,21 +171,41 @@
 </template>
 
 <script>
-import products from '@/data/products.js'
-import categories from '@/data/categories.js'
-import gotoPage from "@/helpers/gotoPage.js"
-import numberFormat from "@/helpers/numberFormat.js"
+import gotoPage from "@/helpers/gotoPage.js";
+import numberFormat from "@/helpers/numberFormat.js";
+import {API_BASE_URL} from "@/config";
 
 import ItemAmountSelector from "@/components/ItemAmountSelector.vue"
+import axios from 'axios';
 
 export default {  
   components: {ItemAmountSelector},
+  watch:{
+    '$route.params.id':{
+      handler(){
+        this.loadProduct();  
+      },
+      immediate:true
+    }
+  },
   data(){
     return {
       productAmount: 1,
+      productData: null,
+      productLoading:true,
+      productLoadingFailed:false,
     }
   },
   methods:{
+    loadProduct(){
+      this.productLoading = true;
+      this.productLoadingFailed = false;
+      axios.get(API_BASE_URL + 'api/products/' + this.$route.params.id)
+        .then(response => this.productData = response.data)
+        .catch(() => this.productLoadingFailed = true)
+        .then(() => this.productLoading = false);
+
+    },
     gotoPage,
     addToCart(){
       this.$store.commit('addProductToCart',{productId:this.product.id, amount:this.productAmount})
@@ -223,10 +216,10 @@ export default {
   },
   computed: {
     product() {
-      return products.find(product => product.id === +this.$route.params.id)      
+      return this.productData;
     },
     category(){
-      return categories.find(category => category.id === this.product.categoryId)
+      return this.productData.category;
     }
   },
 };
