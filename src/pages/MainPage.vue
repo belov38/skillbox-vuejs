@@ -13,6 +13,7 @@
         :color-id.sync="filterColorId"
       />
       <section class="catalog">
+        <div v-if="productLoadingFailed">Ошибка загрузки товаров <button @click.prevent="loadProducts"> Повтор </button></div>
         <ProductList :products="products"></ProductList>
         <BasePagination
           v-model="page"
@@ -35,6 +36,8 @@ export default {
   components: { ProductList, BasePagination, ProductFilter },
   methods:{
     loadProducts(){
+      this.productLoading = true;
+      this.productLoadingFailed = false
       clearTimeout(this.loadProductTimer);
       
       this.loadProductTimer = setTimeout(()=> {
@@ -48,8 +51,11 @@ export default {
             maxPrice: this.filterPriceTo,
             colorId: this.filterColorId,            
           }
-        }).then(response => this.productsData = response.data); 
-      },0)           
+        }).then(response => this.productsData = response.data)
+          .catch(() => this.productLoadingFailed = true)
+          .then(() => this.productLoading = false);
+          
+      },500)           
     }
   },
   created(){    
@@ -66,6 +72,9 @@ export default {
 
       productsData:null,
       loadProductTimer:0,
+
+      productLoading: false,
+      productLoadingFailed: false
     };
   },
   watch:{
