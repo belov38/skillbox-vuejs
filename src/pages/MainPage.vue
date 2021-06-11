@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import products from "@/data/products.js";
 import ProductList from "@/components/ProductList.vue";
 import BasePagination from "@/components/BasePagination.vue";
 import ProductFilter from "@/components/ProductFilter.vue";
@@ -35,7 +34,16 @@ export default {
   components: { ProductList, BasePagination, ProductFilter },
   methods:{
     loadProducts(){
-      axios.get(`https://vue-study.skillbox.cc/api/products?page=${this.page}&limit=${this.productPerPage}`).then(response => this.productsData = response.data);      
+      axios
+        .get(`https://vue-study.skillbox.cc/api/products`,{
+          params:{
+            page: this.page,
+            limit: this.productPerPage,
+            categoryId: this.filterCategoryId,
+            minPrice: this.filterPriceFrom,
+            maxPrice: this.filterPriceTo
+          }
+        }).then(response => this.productsData = response.data);      
     }
   },
   created(){    
@@ -56,39 +64,19 @@ export default {
   watch:{
       page(){        
         this.loadProducts();
-      }
+      },
+      filterCategoryId(){
+        this.loadProducts();
+      },
+      filterPriceFrom(){
+        this.loadProducts();
+      },
+      filterPriceTo(){
+        this.loadProducts();
+      },
+
     },
-  computed: {
-    filteredProducts() {
-      let filteredProducts = products;
-      
-      if (this.filterColorId) {
-        
-        filteredProducts = filteredProducts.filter(          
-          (product) => product.colors.includes(this.filterColorId)
-        );      
-      }
-
-      if (this.filterPriceFrom > 0) {
-        filteredProducts = filteredProducts.filter(
-          (product) => product.price > this.filterPriceFrom
-        );
-      }
-
-      if (this.filterPriceTo > 0) {
-        filteredProducts = filteredProducts.filter(
-          (product) => product.price < this.filterPriceTo
-        );
-      }
-
-      if (this.filterCategoryId > 0) {
-        filteredProducts = filteredProducts.filter(
-          (product) => product.categoryId === this.filterCategoryId
-        );
-      }
-
-      return filteredProducts;
-    },
+  computed: {    
     products() {
       return this.productsData 
         ? this.productsData.items.map(product => {
