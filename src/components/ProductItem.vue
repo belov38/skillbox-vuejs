@@ -16,14 +16,13 @@
         <ul class="colors colors--black">
           <li class="colors__item" v-for="c in item.colors" :key="c.id">
             <label class="colors__label">
-              <!-- <input
+              <input
                 class="colors__radio sr-only"
                 type="radio"
-                :value="resolveColor(c)" 
-                v-model="color"                
+                :value="c.code"                 
               />
-              <span class="colors__value" :style="'background-color: '+resolveColor(c)">
-              </span> -->
+              <span class="colors__value" :style="'background-color: '+c.code">
+              </span>
             </label>
           </li>          
         </ul>
