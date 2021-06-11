@@ -13,6 +13,7 @@
         :color-id.sync="filterColorId"
       />
       <section class="catalog">
+        <div v-if="productLoading">Загрузка...</div>
         <div v-if="productLoadingFailed">Ошибка загрузки товаров <button @click.prevent="loadProducts"> Повтор </button></div>
         <ProductList :products="products"></ProductList>
         <BasePagination
