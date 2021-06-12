@@ -56,7 +56,10 @@ export default new Vuex.Store({
                         })
                 })
         },
-        updateCartProductAmount(context,{ productId, amount }){            
+        updateCartProductAmount(context,{ productId, amount }){                        
+            if(amount<1){
+                return
+            }
             context.commit('updateCartProductAmount', { productId, amount });
             return axios
                         .put(API_BASE_URL + 'api/baskets/products',
