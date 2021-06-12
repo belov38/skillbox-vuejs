@@ -174,7 +174,7 @@
 import gotoPage from "@/helpers/gotoPage.js";
 import numberFormat from "@/helpers/numberFormat.js";
 import {API_BASE_URL} from "@/config";
-
+import { mapActions } from 'vuex';
 import ItemAmountSelector from "@/components/ItemAmountSelector.vue"
 import axios from 'axios';
 
@@ -197,6 +197,7 @@ export default {
     }
   },
   methods:{
+    ...mapActions(['addProductToCart']),
     loadProduct(){
       this.productLoading = true;
       this.productLoadingFailed = false;
@@ -208,7 +209,7 @@ export default {
     },
     gotoPage,
     addToCart(){
-      this.$store.commit('addProductToCart',{productId:this.product.id, amount:this.productAmount})
+      this.addProductToCart({productId:this.product.id, amount:this.productAmount})      
     }    
   },
   filters:{
