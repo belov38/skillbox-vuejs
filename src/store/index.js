@@ -9,7 +9,7 @@ export default new Vuex.Store({
     state: {
         cartProducts: [],
         userAccesKey: null,
-        backupCartProductsData: [],
+        backupCartData: [],
         cartLoading:false        
     },
     actions: {        
@@ -25,9 +25,9 @@ export default new Vuex.Store({
                     if (!context.state.userAccesKey) {
                         localStorage.setItem('UserAccessKey', response.data.user.accessKey);
                         context.commit('updateUserAccessKey', response.data.user.accessKey);
-                    }                    
+                    }                     
                     context.commit('updateCartProductsData', response.data.items);
-                    //context.commit('syncCartProducts');
+                    context.commit('backupCart');
                 })
                 .then(() => context.commit('updateCartLoadingState', false))
         },
@@ -56,11 +56,11 @@ export default new Vuex.Store({
                         })
                 })
         },
-        updateCartProductAmount(context,{ productId, amount }){                        
+        updateCartProductAmount(context,{ productId, amount }){                                    
             if(amount<1){
                 return
             }
-            context.commit('updateCartProductAmount', { productId, amount });
+            context.commit('updateCartProductAmount', { productId, amount });            
             return axios
                         .put(API_BASE_URL + 'api/baskets/products',
                             {
@@ -73,28 +73,31 @@ export default new Vuex.Store({
                                 }
                             })
                         .then(() => {                            
-                            context.commit('updateCartProductData', { productId, amount });
+                            
                         })           
-                        .catch(error => {
-                            console.log('updateCartProductAmount error', error)              
-                            context.commit('recoverCartProductsData');
+                        .catch(error => {                            
+                            console.log('updateCartProductAmount error', error);       
+                            context.commit('recoverCart');
                         })
         }
     },
     mutations: {
+        backupCart(state){            
+            state.backupCartData = JSON.parse(JSON.stringify(state.cartProducts));
+        },
+        recoverCart(state){
+            console.log('Recovering cart data',state.backupCartData);
+            state.cartProducts = JSON.parse(JSON.stringify(state.backupCartData));            
+        },
         updateCartLoadingState(state, value){
             state.cartLoading = value;
         },
         updateUserAccessKey(state, accessKey) {
             state.userAccesKey = accessKey;
         },
-        updateCartProductsData(state, items) {  
-            state.backupCartProductsData = items;
+        updateCartProductsData(state, items) {              
             state.cartProducts = items;            
-        },       
-        recoverCartProductsData(state) {  
-            state.cartProducts = state.backupCartProductsData;            
-        },       
+        },            
         updateCartProductAmount(state, { productId, amount }) {
             const item = state.cartProducts.find(item => item.product.id === productId);            
             if (item) {
