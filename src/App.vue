@@ -132,9 +132,10 @@ export default {
   },
 
   created(){    
-    const userAccessKey = localStorage.getItem('userAccessKey');
-    if (userAccessKey){
+    const userAccessKey = localStorage.getItem('UserAccessKey');    
+    if (userAccessKey){      
       this.updateUserAccessKey(userAccessKey)      
+      console.log(this.$store.userAccessKey)
     }
     this.loadCart();
   },  
