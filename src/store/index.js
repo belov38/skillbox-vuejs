@@ -54,11 +54,10 @@ export default new Vuex.Store({
                 state.cartProducts.push({ productId, amount })
             }
         },
-        updateCartProductAmount(state, { productId, amount }) {
-            const item = state.cartProducts.find(item => item.productId === productId);
-
+        updateCartProductAmount(state, { itemId, amount }) {
+            const item = state.cartProducts.find(item => item.id === itemId);            
             if (item) {
-                item.amount = amount;
+                item.quantity = amount;
             }
         },
         deleteCartProduct(state, productId) {

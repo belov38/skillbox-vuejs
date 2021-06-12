@@ -51,10 +51,8 @@ export default {
             get(){
                 return this.item.quantity;
             },
-            set(value){
-                console.log(value)
-                // TODO
-                //this.$store.commit('updateCartProductAmount',{productId: this.item.productId, amount:value})
+            set(value){                
+                this.$store.commit('updateCartProductAmount',{itemId: this.item.id, amount:value})
             }
         }
     },
