@@ -79,6 +79,25 @@ export default new Vuex.Store({
                             console.log('updateCartProductAmount error', error);       
                             context.commit('recoverCart');
                         })
+        },
+        deleteCartProduct(context,productId){            
+            context.commit('deleteCartProduct', productId);  
+            return axios
+                        .delete(API_BASE_URL + 'api/baskets/products',                            
+                            {
+                                params: {
+                                    userAccessKey: context.state.userAccesKey
+                                },data:{productId: productId,}
+                            },
+                            
+                            )
+                        .then(() => {                            
+                            
+                        })           
+                        .catch(error => {                            
+                            console.log('updateCartProductAmount error', error);       
+                            context.commit('recoverCart');
+                        }) 
         }
     },
     mutations: {
@@ -105,14 +124,14 @@ export default new Vuex.Store({
             }
         },
         deleteCartProduct(state, productId) {
-            state.cartProducts = state.cartProducts.filter(item => item.productId !== productId)
+            state.cartProducts = state.cartProducts.filter(item => item.product.id !== productId)
         }
     },
     getters: {        
         cartTotalPrice(state) {        
             return state.cartProducts.reduce((acc, item) => (item.price * item.quantity) + acc, 0)
         },
-        cartProducts(state){
+        cartProducts(state){            
             return state.cartProducts;
         },
         cartLoadingState(state){
