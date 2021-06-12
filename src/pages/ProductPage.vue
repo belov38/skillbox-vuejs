@@ -214,7 +214,7 @@ export default {
     gotoPage,
     addToCart(){
       this.productAdded = false;
-      this.productAddSending= true;
+      this.productAddSending = true;
       this.addProductToCart({productId:this.product.id, amount:this.productAmount})
         .then(()=> {
           this.productAdded = true;
