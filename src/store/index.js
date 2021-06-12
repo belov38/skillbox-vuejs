@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import products from '@/data/products'
 import axios from "axios";
 import { API_BASE_URL } from "@/config"
 
@@ -8,15 +7,12 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        cartProducts: [
-            { productId: 1, amount: 2 }
-        ],
+        cartProducts: [],
         userAccesKey: null,
         cartProductsData: []
     },
     actions: {
         loadCart(context) {
-
             axios
                 .get(API_BASE_URL + 'api/baskets', {
                     params: {
@@ -27,17 +23,26 @@ export default new Vuex.Store({
                     if (!context.state.userAccesKey) {
                         localStorage.setItem('UserAccessKey', response.data.user.accessKey);
                         context.commit('updateUserAccessKey', response.data.user.accessKey);
-                    }
+                    }                    
                     context.commit('updateCartProductsData', response.data.items);
-                })
+                    //context.commit('syncCartProducts');
+                })                 
         }
     },
     mutations: {
+        //syncCartProducts(state){
+            // state.cartProducts = state.cartProductsData.map(item =>  {
+            //     return {
+            //         productId: item.product.id,
+            //         amount: item.quantity
+            //     }
+            // })
+        //},
         updateUserAccessKey(state, accessKey) {
             state.userAccesKey = accessKey;
         },
-        updateCartProductsData(state, items) {
-            state.cartProducts = items;
+        updateCartProductsData(state, items) {            
+            state.cartProducts = items;            
         },
 
         addProductToCart(state, { productId, amount }) {
@@ -60,17 +65,9 @@ export default new Vuex.Store({
             state.cartProducts = state.cartProducts.filter(item => item.productId !== productId)
         }
     },
-    getters: {
-        cartDetailsProducts(state) {
-            return state.cartProducts.map(item => {
-                return {
-                    ...item,
-                    product: products.find(p => p.id === item.productId)
-                }
-            });
-        },
-        cartTotalPrice(state, getters) {
-            return getters.cartDetailsProducts.reduce((acc, item) => (item.product.price * item.amount) + acc, 0)
+    getters: {        
+        cartTotalPrice(state) {        
+            return state.cartProducts.reduce((acc, item) => (item.price * item.quantity) + acc, 0)
         }
     }
 })

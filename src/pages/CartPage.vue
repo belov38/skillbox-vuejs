@@ -26,7 +26,7 @@
       <form class="cart__form form" action="#" method="POST">
         <div class="cart__field">
           <ul class="cart__list">
-            <CartItem  v-for="item in products" :key="item.productId" :item="item"/>
+            <CartItem  v-for="item in $store.state.cartProducts" :key="item.id" :item="item"/>            
           </ul>
         </div>
 
@@ -56,7 +56,7 @@ export default {
   components: {CartItem},
   filters: {numberFormat},
   computed:{
-    ...mapGetters({products:'cartDetailsProducts', totalPrice:'cartTotalPrice'}),    
+    ...mapGetters({totalPrice:'cartTotalPrice'}),    
   }
 }
 </script>

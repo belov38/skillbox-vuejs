@@ -1,7 +1,7 @@
 <template>
     <li class="cart__item product">
               <div class="product__pic">
-                <img :src="item.product.image" width="120" height="120" :alt="item.product.title">
+                <img :src="item.product.image.file.url" width="120" height="120" :alt="item.product.title">
               </div>
               <h3 class="product__title">
                 {{ item.product.title }}
@@ -26,11 +26,11 @@
                 </button>
               </div>
 
-              <b class="product__price">
-                {{ item.amount * item.product.price | numberFormat }} ₽
+              <b class="product__price">                
+                {{ item.quantity * item.price | numberFormat }} ₽
               </b>
 
-              <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины" @click.prevent="deleteProduct(item.productId)">
+              <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины" @click.prevent="deleteProduct(item.id)">
                 <svg width="20" height="20" fill="currentColor">
                   <use xlink:href="#icon-close"></use>
                 </svg>
@@ -49,10 +49,12 @@ export default {
     computed: {
         amount: {
             get(){
-                return this.item.amount;
+                return this.item.quantity;
             },
             set(value){
-                this.$store.commit('updateCartProductAmount',{productId: this.item.productId, amount:value})
+                console.log(value)
+                // TODO
+                //this.$store.commit('updateCartProductAmount',{productId: this.item.productId, amount:value})
             }
         }
     },

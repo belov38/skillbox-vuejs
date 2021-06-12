@@ -81,7 +81,7 @@ export default [
         image:"img/airpods.jpg",
         colors:['white']
     },{
-        id:12,
+        id:13,
         categoryId: 5,
         title:'Наушники Sony',
         price:30690,
