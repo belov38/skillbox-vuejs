@@ -30,14 +30,6 @@ export default new Vuex.Store({
         }
     },
     mutations: {
-        //syncCartProducts(state){
-            // state.cartProducts = state.cartProductsData.map(item =>  {
-            //     return {
-            //         productId: item.product.id,
-            //         amount: item.quantity
-            //     }
-            // })
-        //},
         updateUserAccessKey(state, accessKey) {
             state.userAccesKey = accessKey;
         },
