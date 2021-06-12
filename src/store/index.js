@@ -9,10 +9,12 @@ export default new Vuex.Store({
     state: {
         cartProducts: [],
         userAccesKey: null,
-        cartProductsData: []
+        cartProductsData: [],
+        cartLoading:false        
     },
-    actions: {
+    actions: {        
         loadCart(context) {
+            context.commit('updateCartLoadingState', true);
             axios
                 .get(API_BASE_URL + 'api/baskets', {
                     params: {
@@ -26,10 +28,14 @@ export default new Vuex.Store({
                     }                    
                     context.commit('updateCartProductsData', response.data.items);
                     //context.commit('syncCartProducts');
-                })                 
+                })
+                .then(() => context.commit('updateCartLoadingState', false))
         }
     },
     mutations: {
+        updateCartLoadingState(state, value){
+            state.cartLoading = value;
+        },
         updateUserAccessKey(state, accessKey) {
             state.userAccesKey = accessKey;
         },
@@ -59,6 +65,12 @@ export default new Vuex.Store({
     getters: {        
         cartTotalPrice(state) {        
             return state.cartProducts.reduce((acc, item) => (item.price * item.quantity) + acc, 0)
+        },
+        cartProducts(state){
+            return state.cartProducts;
+        },
+        cartLoadingState(state){
+            return state.cartLoading;
         }
     }
 })
