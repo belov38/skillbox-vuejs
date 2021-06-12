@@ -100,10 +100,12 @@
 
             <div class="item__row">
               <ItemAmountSelector :itemAmount.sync="productAmount"/>
-              <button class="button button--primery" type="submit">
+              <button class="button button--primery" type="submit" :disabled="productAddSending">
                 В корзину
               </button>
             </div>
+            <div v-show="productAdded">Товар добавлен</div>
+            <div v-show="productAddSending">Добавляем товар в корзину</div>
           </form>
         </div>
       </div>
@@ -194,6 +196,8 @@ export default {
       productData: null,
       productLoading:true,
       productLoadingFailed:false,
+      productAdded:false,
+      productAddSending:false
     }
   },
   methods:{
@@ -209,7 +213,13 @@ export default {
     },
     gotoPage,
     addToCart(){
-      this.addProductToCart({productId:this.product.id, amount:this.productAmount})      
+      this.productAdded = false;
+      this.productAddSending= true;
+      this.addProductToCart({productId:this.product.id, amount:this.productAmount})
+        .then(()=> {
+          this.productAdded = true;
+          this.productAddSending= false;
+        })      
     }    
   },
   filters:{
