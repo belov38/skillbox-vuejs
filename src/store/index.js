@@ -9,7 +9,7 @@ export default new Vuex.Store({
     state: {
         cartProducts: [],
         userAccesKey: null,
-        cartProductsData: [],
+        backupCartProductsData: [],
         cartLoading:false        
     },
     actions: {        
@@ -55,6 +55,27 @@ export default new Vuex.Store({
                             context.commit('updateCartLoadingState', false);
                         })
                 })
+        },
+        updateCartProductAmount(context,{ productId, amount }){            
+            context.commit('updateCartProductAmount', { productId, amount });
+            return axios
+                        .put(API_BASE_URL + 'api/baskets/products',
+                            {
+                                productId: productId,
+                                quantity: amount
+                            },
+                            {
+                                params: {
+                                    userAccessKey: context.state.userAccesKey
+                                }
+                            })
+                        .then(() => {                            
+                            context.commit('updateCartProductData', { productId, amount });
+                        })           
+                        .catch(error => {
+                            console.log('updateCartProductAmount error', error)              
+                            context.commit('recoverCartProductsData');
+                        })
         }
     },
     mutations: {
@@ -64,11 +85,15 @@ export default new Vuex.Store({
         updateUserAccessKey(state, accessKey) {
             state.userAccesKey = accessKey;
         },
-        updateCartProductsData(state, items) {            
+        updateCartProductsData(state, items) {  
+            state.backupCartProductsData = items;
             state.cartProducts = items;            
         },       
-        updateCartProductAmount(state, { itemId, amount }) {
-            const item = state.cartProducts.find(item => item.id === itemId);            
+        recoverCartProductsData(state) {  
+            state.cartProducts = state.backupCartProductsData;            
+        },       
+        updateCartProductAmount(state, { productId, amount }) {
+            const item = state.cartProducts.find(item => item.product.id === productId);            
             if (item) {
                 item.quantity = amount;
             }
