@@ -28,14 +28,14 @@
     </div>
 
     <section class="cart">
-      <form class="cart__form form" action="#" method="POST">
+      <form class="cart__form form" action="#" method="POST" @submit.prevent="order">
         <div class="cart__field">
           <div class="cart__data">
             <BaseFormText title="ФИО" placeholder="Введите ваше полное имя" v-model="formData.name" :error="formError.name"/>            
             <BaseFormText title="Адрес доставки" placeholder="Введите ваш адрес" v-model="formData.address" :error="formError.address"/>            
             <BaseFormText title="Телефон" placeholder="Введите ваш телефон" v-model="formData.phone" :error="formError.phone" type="tel"/>            
             <BaseFormText title="Email" placeholder="Введи ваш Email" v-model="formData.email" :error="formError.email" type="email"/>            
-            <BaseFormTextarea title="Комментарий к заказу" placeholder="Ваши пожелания" v-model="formData.comments" :error="formError.comments"/>
+            <BaseFormTextarea title="Комментарий к заказу" placeholder="Ваши пожелания" v-model="formData.comment" :error="formError.comment"/>
           </div>
 
           <div class="cart__options">
@@ -109,10 +109,10 @@
             Оформить заказ
           </button>
         </div>
-        <div class="cart__error form__error-block">
+        <div class="cart__error form__error-block" v-if="formErrorMessage">
           <h4>Заявка не отправлена!</h4>
           <p>
-            Похоже произошла ошибка. Попробуйте отправить снова или перезагрузите страницу.
+            {{ formErrorMessage }}
           </p>
         </div>
       </form>
@@ -123,14 +123,43 @@
 <script>
 import BaseFormText from "@/components/BaseFormText.vue"
 import BaseFormTextarea from "@/components/BaseFormTextarea.vue"
+import axios from 'axios'
+import { API_BASE_URL } from "@/config"
 
 export default {
     components:{ BaseFormText, BaseFormTextarea },
     data(){
         return{
             formData:{},
-            formError:{}
+            formError:{},
+            formErrorMessage:''
+        }
+    },
+    methods:
+    {   
+        order(){
+            this.formError = {};
+            this.formErrorMessage = ''
+            axios
+                .post(API_BASE_URL + 'api/orders',{
+                    ...this.formData
+                    },
+                        {
+                        params:{
+                            userAccessKey:this.$store.state.userAccesKey
+                        }
+                    }
+                )
+                .then(() => {
+                    this.$store.commit('resetCart');
+                })
+                .catch(error => {
+                    this.formErrorMessage = error.response.data.error.message;
+                    this.formError = error.response.data.error.request || {}
+                })
+
         }
     }
+
 }
 </script>

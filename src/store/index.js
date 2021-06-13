@@ -101,6 +101,9 @@ export default new Vuex.Store({
         }
     },
     mutations: {
+        resetCart(state){
+            state.cartProducts = []
+        },
         backupCart(state){            
             state.backupCartData = JSON.parse(JSON.stringify(state.cartProducts));
         },
