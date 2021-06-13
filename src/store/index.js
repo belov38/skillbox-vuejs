@@ -154,6 +154,9 @@ export default new Vuex.Store({
         },
         cartLoadingState(state){
             return state.cartLoading;
+        },
+        orderInfo(state) {
+            return state.orderInfo;
         }
     }
 })

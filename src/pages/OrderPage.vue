@@ -1,5 +1,6 @@
 <template>
-    <main class="content container">
+    <PreloaderBig v-if="loading" />
+    <main class="content container" v-else>
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
@@ -102,12 +103,13 @@
 import BaseFormText from "@/components/BaseFormText.vue"
 import BaseFormTextarea from "@/components/BaseFormTextarea.vue"
 import OrderList from "@/components/OrderList.vue";
+import PreloaderBig from "@/components/PreloaderBig.vue";
 import { mapGetters } from "vuex";
 import axios from 'axios'
 import { API_BASE_URL } from "@/config"
 
 export default {
-    components:{ BaseFormText, BaseFormTextarea, OrderList },
+    components:{ BaseFormText, BaseFormTextarea, OrderList, PreloaderBig },
     computed: {
       ...mapGetters({
       totalPrice: "cartTotalPrice",
@@ -119,7 +121,8 @@ export default {
         return{
             formData:{},
             formError:{},
-            formErrorMessage:''
+            formErrorMessage:'',
+            loading:false
         }
     },
     methods:
@@ -127,6 +130,7 @@ export default {
         order(){
             this.formError = {};
             this.formErrorMessage = ''
+            this.loading=true;
             axios
                 .post(API_BASE_URL + 'api/orders',{
                     ...this.formData
@@ -141,10 +145,12 @@ export default {
                     this.$store.commit('resetCart');
                     this.$store.commit('updateOrderInfo', response.data);
                     this.$router.push({name:'orderInfo', params:{id:response.data.id}});
+                    this.loading=false;
                 })
                 .catch(error => {
                     this.formErrorMessage = error.response.data.error.message;
                     this.formError = error.response.data.error.request || {}
+                    this.loading=false;
                 })
 
         }
