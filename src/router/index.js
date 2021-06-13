@@ -33,7 +33,7 @@ const routes = [
     {
         name: 'orderInfo',
         component: OrderInfoPage,
-        path: '/order/info/'
+        path: '/order/:id'
     },
     {
         name: 'notFound',

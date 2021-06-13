@@ -107,6 +107,12 @@
 
 <script>
 export default {
+  created(){   
+    if(this.$store.state.orderInfo && this.$store.state.orderInfo. id === this.$route.params.id) {
+      return
+    }
+      this.$store.dispatch('loadOrderInfo', this.$route.params.id)    
+  }
     
 }
 </script>
