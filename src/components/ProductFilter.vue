@@ -62,7 +62,7 @@
       </fieldset>
 
       <fieldset class="form__block">
-        <legend class="form__legend">Объемб в ГБ</legend>
+        <legend class="form__legend">Объем в ГБ</legend>
         <ul class="check-list">
           <li class="check-list__item">
             <label class="check-list__label">
@@ -72,6 +72,7 @@
                 name="volume"
                 value="8"
                 checked=""
+                v-model="currentMemory8"
               />
               <span class="check-list__desc">
                 8
@@ -86,6 +87,7 @@
                 type="checkbox"
                 name="volume"
                 value="16"
+                v-model="currentMemory16"
               />
               <span class="check-list__desc">
                 16
@@ -100,6 +102,7 @@
                 type="checkbox"
                 name="volume"
                 value="32"
+                v-model="currentMemory32"
               />
               <span class="check-list__desc">
                 32
@@ -114,6 +117,7 @@
                 type="checkbox"
                 name="volume"
                 value="64"
+                v-model="currentMemory64"
               />
               <span class="check-list__desc">
                 64
@@ -128,6 +132,7 @@
                 type="checkbox"
                 name="volume"
                 value="128"
+                v-model="currentMemory128"
               />
               <span class="check-list__desc">
                 128
@@ -142,6 +147,7 @@
                 type="checkbox"
                 name="volume"
                 value="264"
+                v-model="currentMemory264"
               />
               <span class="check-list__desc">
                 264
@@ -174,6 +180,12 @@ export default {
       currentPriceTo:0,
       currentCategoryId:0,
       currentColorId:0,
+      currentMemory8:false,
+      currentMemory16:false,
+      currentMemory32:false,
+      currentMemory64:false,
+      currentMemory128:false,
+      currentMemory264:false,
       categoriesDate: null,   
       colorsData: null,
     }
@@ -225,6 +237,12 @@ export default {
       this.$emit('update:priceTo',0);
       this.$emit('update:categoryId',0);
       this.$emit('update:colorId',0);           
+      this.currentMemory8 = false;
+      this.currentMemory16 = false;
+      this.currentMemory32 = false;
+      this.currentMemory64 = false;
+      this.currentMemory128 = false;
+      this.currentMemory264 = false;
     },
   }
 };
