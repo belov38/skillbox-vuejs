@@ -193,13 +193,12 @@ export default {
       priceTo(value){
         this.currentPriceTo=value;
       },
-      categoryId(value){
-        console.log('w cat')
+      categoryId(value){        
         this.currentCategoryId=value;
       },
       colorId(value){
         console.log('w color')
-        this.colorId=value;
+        this.currentColorId=value;
       },
   },
   created(){
@@ -225,7 +224,7 @@ export default {
       this.$emit('update:priceFrom',0);
       this.$emit('update:priceTo',0);
       this.$emit('update:categoryId',0);
-      this.$emit('update:colorId',0);
+      this.$emit('update:colorId',0);           
     },
   }
 };
