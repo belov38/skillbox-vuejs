@@ -1,5 +1,6 @@
-npm run build
+call npm run build
 echo pushing
+
 cd ./dist
 git init
 git add -A
